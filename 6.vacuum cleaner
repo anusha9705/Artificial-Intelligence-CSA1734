@@ -1,0 +1,61 @@
+class VacuumCleaner:
+    def __init__(self, grid):
+        self.grid = grid
+        self.position = (0, 0)  
+        self.actions = []
+        self.cleaned_spots = 0
+
+    def is_dirty(self, position):
+        x, y = position
+        return self.grid[x][y] == 1
+
+    def clean(self, position):
+        x, y = position
+        if self.grid[x][y] == 1:
+            self.grid[x][y] = 0
+            self.cleaned_spots += 1
+
+    def move(self, new_position):
+        self.position = new_position
+        self.actions.append(f"Moved to {new_position}")
+        if self.is_dirty(new_position):
+            self.clean(new_position)
+            self.actions.append(f"Cleaned spot at {new_position}")
+
+    def get_possible_moves(self):
+        x, y = self.position
+        moves = []
+        if x > 0:
+            moves.append((x - 1, y)) 
+        if x < len(self.grid) - 1:
+            moves.append((x + 1, y))  
+        if y > 0:
+            moves.append((x, y - 1))  
+        if y < len(self.grid[0]) - 1:
+            moves.append((x, y + 1))  
+        return moves
+
+    def run(self):
+        while self.cleaned_spots < sum(row.count(1) for row in self.grid):
+            possible_moves = self.get_possible_moves()
+            for move in possible_moves:
+                if self.is_dirty(move):
+                    self.move(move)
+                    break
+            else:
+                self.move(possible_moves[0])
+
+def main():
+    grid = [
+        [1, 0],
+        [1, 1]
+    ]
+
+    vacuum = VacuumCleaner(grid)
+    vacuum.run()
+
+    for action in vacuum.actions:
+        print(action)
+
+if __name__ == "__main__":
+    main()
