@@ -1,0 +1,50 @@
+from collections import deque
+
+def bfs(capacity1, capacity2, target):
+    queue = deque()
+    queue.append((0, 0)) 
+    visited = set()
+    visited.add((0, 0))
+    path = []
+
+    while queue:
+        current_state = queue.popleft()
+        (jug1, jug2) = current_state
+        if jug1 == target or jug2 == target:
+            path.append(current_state)
+            return path
+        path.append(current_state)
+        possible_moves = [
+            (capacity1, jug2),  
+            (jug1, capacity2),  
+            (0, jug2),          
+            (jug1, 0),         
+            (min(jug1 + jug2, capacity1), max(0, jug2 - (capacity1 - jug1))), 
+            (max(0, jug1 - (capacity2 - jug2)), min(jug1 + jug2, capacity2)),  
+        ]
+
+        for next_state in possible_moves:
+            if next_state not in visited:
+                visited.add(next_state)
+                queue.append(next_state)
+
+    return None
+
+def print_solution(path):
+    for state in path:
+        print(f"Jug1: {state[0]} liters, Jug2: {state[1]} liters")
+
+def main():
+    capacity1 = 4 
+    capacity2 = 3  
+    target = 2     
+
+    path = bfs(capacity1, capacity2, target)
+    if path:
+        print("Solution path:")
+        print_solution(path)
+    else:
+        print("No solution found.")
+
+if __name__ == "__main__":
+    main()
