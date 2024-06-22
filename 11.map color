@@ -1,0 +1,52 @@
+from collections import defaultdict
+
+class CSP:
+    def __init__(self, variables, domains, neighbors, constraints):
+        self.variables = variables
+        self.domains = domains
+        self.neighbors = neighbors
+        self.constraints = constraints
+        self.assignment = {}
+
+    def is_consistent(self, var, value):
+        for neighbor in self.neighbors[var]:
+            if neighbor in self.assignment and not self.constraints(var, value, neighbor, self.assignment[neighbor]):
+                return False
+        return True
+
+    def backtrack(self):
+        if len(self.assignment) == len(self.variables):
+            return self.assignment
+
+        var = self.select_unassigned_variable()
+        for value in self.domains[var]:
+            if self.is_consistent(var, value):
+                self.assignment[var] = value
+                result = self.backtrack()
+                if result:
+                    return result
+                del self.assignment[var]
+        return None
+
+    def select_unassigned_variable(self):
+        unassigned_variables = [v for v in self.variables if v not in self.assignment]
+        return min(unassigned_variables, key=lambda var: len(self.domains[var]))
+
+def map_coloring_csp():
+    variables = ['WA', 'NT', 'SA', 'Q', 'NSW', 'V', 'T']
+    domains = {var: ['Red', 'Green', 'Blue'] for var in variables}
+    neighbors = {
+        'WA': ['NT', 'SA'],
+        'NT': ['WA', 'SA', 'Q'],
+        'SA': ['WA', 'NT', 'Q', 'NSW', 'V'],
+        'Q': ['NT', 'SA', 'NSW'],
+        'NSW': ['Q', 'SA', 'V'],
+        'V': ['SA', 'NSW'],
+        'T': []
+    }
+    def constraints(var1, value1, var2, value2):
+        return value1 != value2
+    csp = CSP(variables, domains, neighbors, constraints)
+    return csp.backtrack()
+solution = map_coloring_csp()
+print("Solution:", solution)
