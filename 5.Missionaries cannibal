@@ -1,0 +1,65 @@
+from collections import deque
+
+def is_valid_state(state):
+    missionaries_left, cannibals_left, boat, missionaries_right, cannibals_right = state
+    if missionaries_left >= 0 and missionaries_right >= 0 and cannibals_left >= 0 and cannibals_right >= 0:
+        if (missionaries_left == 0 or missionaries_left >= cannibals_left) and \
+           (missionaries_right == 0 or missionaries_right >= cannibals_right):
+            return True
+    return False
+
+def get_successors(state):
+    successors = []
+    missionaries_left, cannibals_left, boat, missionaries_right, cannibals_right = state
+
+    if boat == 'left':
+        moves = [(1, 0), (2, 0), (0, 1), (0, 2), (1, 1)]
+        for m, c in moves:
+            new_state = (missionaries_left - m, cannibals_left - c, 'right', missionaries_right + m, cannibals_right + c)
+            if is_valid_state(new_state):
+                successors.append(new_state)
+    else:
+        moves = [(1, 0), (2, 0), (0, 1), (0, 2), (1, 1)]
+        for m, c in moves:
+            new_state = (missionaries_left + m, cannibals_left + c, 'left', missionaries_right - m, cannibals_right - c)
+            if is_valid_state(new_state):
+                successors.append(new_state)
+
+    return successors
+
+def bfs(initial_state):
+    queue = deque([initial_state])
+    visited = set()
+    visited.add(initial_state)
+    parent = {initial_state: None}
+
+    while queue:
+        current_state = queue.popleft()
+
+        if current_state[:2] == (0, 0):
+            path = []
+            while current_state:
+                path.append(current_state)
+                current_state = parent[current_state]
+            return path[::-1]
+
+        for successor in get_successors(current_state):
+            if successor not in visited:
+                queue.append(successor)
+                visited.add(successor)
+                parent[successor] = current_state
+
+    return None
+
+def main():
+    initial_state = (3, 3, 'left', 0, 0) 
+    solution = bfs(initial_state)
+    
+    if solution:
+        for step in solution:
+            print(step)
+    else:
+        print("No solution found.")
+
+if __name__ == "__main__":
+    main()
