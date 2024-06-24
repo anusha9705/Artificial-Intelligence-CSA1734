@@ -1,0 +1,37 @@
+planet('Mercury', 57.9, 4879, 0.33).
+planet('Venus', 108.2, 12104, 4.87).
+planet('Earth', 149.6, 12756, 5.97).
+planet('Mars', 227.9, 6792, 0.642).
+planet('Jupiter', 778.6, 142984, 1898).
+planet('Saturn', 1433.5, 120536, 568).
+planet('Uranus', 2872.5, 51118, 86.8).
+planet('Neptune', 4495.1, 49528, 102).
+
+distance_from_sun(Name, Distance) :-
+    planet(Name, Distance, _, _).
+
+diameter_of_planet(Name, Diameter) :-
+    planet(Name, _, Diameter, _).
+
+mass_of_planet(Name, Mass) :-
+    planet(Name, _, _, Mass).
+
+planets_within_distance(MaxDistance, Name) :-
+    planet(Name, Distance, _, _),
+    Distance =< MaxDistance.
+
+planets_larger_than(MinDiameter, Name) :-
+    planet(Name, _, Diameter, _),
+    Diameter > MinDiameter.
+
+planets_heavier_than(MinMass, Name) :-
+    planet(Name, _, _, Mass),
+    Mass > MinMass.
+
+largest_planet(Name) :-
+    planet(Name, _, Diameter, _),
+    \+ (planet(_, _, OtherDiameter, _), OtherDiameter > Diameter).
+
+smallest_planet(Name) :-
+    planet(Name, _, _, Mass),
+    \+ (planet(_, _, _, OtherMass), OtherMass < Mass).
