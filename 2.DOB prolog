@@ -1,0 +1,18 @@
+person('Alice', '1990-01-15').
+person('Bob', '1985-03-22').
+person('Charlie', '1992-07-30').
+person('Diana', '1988-11-02').
+person('Eve', '1995-12-12').
+
+dob(Name, DOB) :-
+    person(Name, DOB).
+
+name(DOB, Name) :-
+    person(Name, DOB).
+
+person_exists(Name) :-
+    person(Name, _).
+
+born_in_year(Year, Name) :-
+    person(Name, DOB),
+    sub_atom(DOB, 0, 4, _, Year).
