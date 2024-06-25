@@ -1,0 +1,84 @@
+parent(john, mary).
+parent(john, david).
+parent(susan, mary).
+parent(susan, david).
+parent(david, sarah).
+parent(david, james).
+parent(mary, laura).
+parent(mary, kevin).
+parent(paul, john).
+parent(linda, john).
+
+male(john).
+male(david).
+male(james).
+male(kevin).
+male(paul).
+
+female(susan).
+female(mary).
+female(sarah).
+female(laura).
+female(linda).
+
+siblings(X, Y) :-
+    parent(P, X),
+    parent(P, Y),
+    X \= Y.
+
+grandparent(Grandparent, Grandchild) :-
+    parent(Grandparent, Parent),
+    parent(Parent, Grandchild).
+
+ancestor(Ancestor, Descendant) :-
+    parent(Ancestor, Descendant).
+ancestor(Ancestor, Descendant) :-
+    parent(Ancestor, Intermediate),
+    ancestor(Intermediate, Descendant).
+
+uncle(Uncle, NieceNephew) :-
+    male(Uncle),
+    siblings(Uncle, Parent),
+    parent(Parent, NieceNephew).
+
+aunt(Aunt, NieceNephew) :-
+    female(Aunt),
+    siblings(Aunt, Parent),
+    parent(Parent, NieceNephew).
+
+cousin(X, Y) :-
+    parent(P1, X),
+    parent(P2, Y),
+    siblings(P1, P2).
+
+is_male(Name) :-
+    male(Name),
+    format('~w is male.~n', [Name]).
+
+is_female(Name) :-
+    female(Name),
+    format('~w is female.~n', [Name]).
+
+is_sibling(X, Y) :-
+    siblings(X, Y),
+    format('~w and ~w are siblings.~n', [X, Y]).
+
+is_grandparent(GP, GC) :-
+    grandparent(GP, GC),
+    format('~w is the grandparent of ~w.~n', [GP, GC]).
+
+is_ancestor(A, D) :-
+    ancestor(A, D),
+    format('~w is an ancestor of ~w.~n', [A, D]).
+
+is_uncle(U, N) :-
+    uncle(U, N),
+    format('~w is the uncle of ~w.~n', [U, N]).
+
+is_aunt(A, N) :-
+    aunt(A, N),
+    format('~w is the aunt of ~w.~n', [A, N]).
+
+is_cousin(X, Y) :-
+    cousin(X, Y),
+    format('~w and ~w are cousins.~n', [X, Y]).
