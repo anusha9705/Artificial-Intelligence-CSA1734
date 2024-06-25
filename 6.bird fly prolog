@@ -1,0 +1,26 @@
+bird(sparrow).
+bird(eagle).
+bird(penguin).
+bird(ostrich).
+bird(duck).
+bird(chicken).
+
+non_flying_bird(penguin).
+non_flying_bird(ostrich).
+non_flying_bird(chicken).
+
+can_fly(Bird) :-
+    bird(Bird),
+    \+ non_flying_bird(Bird).
+
+cannot_fly(Bird) :-
+    bird(Bird),
+    non_flying_bird(Bird).
+
+check_fly(Bird) :-
+    can_fly(Bird),
+    format('~w can fly.~n', [Bird]).
+
+check_fly(Bird) :-
+    cannot_fly(Bird),
+    format('~w cannot fly.~n', [Bird]).
