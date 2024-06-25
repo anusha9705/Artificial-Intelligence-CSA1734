@@ -1,0 +1,13 @@
+diet_suggestion(diabetes, 'Avoid sugary foods and drinks. Eat whole grains, vegetables, fruits, lean proteins, and healthy fats in moderation. Monitor carbohydrate intake and consider portion sizes.').
+diet_suggestion(diabetes, 'Limit intake of processed foods and sugary snacks. Choose low-glycemic index foods.').
+
+diet_suggestion(hypertension, 'Limit sodium (salt) intake. Choose low-sodium options and avoid adding salt to meals.').
+diet_suggestion(hypertension, 'Eat potassium-rich foods such as bananas, oranges, and leafy greens.').
+diet_suggestion(hypertension, 'Include calcium-rich foods such as dairy products or fortified alternatives.').
+diet_suggestion(hypertension, 'Reduce alcohol intake and avoid sugary drinks.').
+diet_suggestion(hypertension, 'Choose lean proteins and healthy fats.').
+diet_suggestion(hypertension, 'Monitor portion sizes and maintain a healthy weight.').
+
+suggest_diet(Disease) :-
+    diet_suggestion(Disease, Suggestion),
+    format('For ~w, follow these dietary guidelines:~n~w~n', [Disease, Suggestion]).
