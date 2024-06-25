@@ -1,0 +1,45 @@
+at(monkey, box1).
+at(box1, ground).
+at(bananas, ceiling).
+
+climb(ground, box1).
+climb(box1, ground).
+climb(box1, ceiling).
+
+goal_state :-
+    at(monkey, bananas).
+
+move(Action) :-
+    call(Action),
+    write('Action: '), write(Action), nl,
+    update_state(Action),
+    write_state.
+
+update_state(climb(From, To)) :-
+    retract(at(monkey, From)),
+    assertz(at(monkey, To)).
+
+write_state :-
+    write('Current state: '), nl,
+    at(monkey, MonkeyLoc),
+    at(box1, BoxLoc),
+    at(bananas, BananaLoc),
+    write('Monkey is at '), write(MonkeyLoc), nl,
+    write('Box1 is at '), write(BoxLoc), nl,
+    write('Bananas are at '), write(BananaLoc), nl, nl.
+
+plan :-
+    write('Starting Monkey Banana Problem...'), nl,
+    write_state,
+    dfs([at(monkey, box1)], []).
+
+dfs(State, _) :-
+    goal_state,
+    write('Goal reached!'), nl,
+    write('Final state:'), nl,
+    write_state.
+
+dfs(State, Visited) :-
+    move(climb(X, Y)),
+    \+ member(State, Visited), % Ensure we do not revisit the same state
+    dfs([at(monkey, Y) | State], [State | Visited]).
