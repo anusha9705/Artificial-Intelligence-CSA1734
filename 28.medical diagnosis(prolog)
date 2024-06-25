@@ -1,0 +1,31 @@
+symptom(john, fever).
+symptom(john, cough).
+symptom(john, sore_throat).
+symptom(mary, fever).
+symptom(mary, rash).
+symptom(susan, headache).
+symptom(susan, fever).
+symptom(susan, nausea).
+symptom(tom, cough).
+symptom(tom, sore_throat).
+
+disease(flu, [fever, cough, sore_throat]).
+disease(measles, [fever, cough, rash]).
+disease(cold, [cough, sore_throat]).
+disease(migraine, [headache, nausea]).
+
+has_disease(Patient, Disease) :-
+    disease(Disease, Symptoms),
+    has_all_symptoms(Patient, Symptoms).
+
+has_all_symptoms(_, []).
+has_all_symptoms(Patient, [Symptom | Rest]) :-
+    symptom(Patient, Symptom),
+    has_all_symptoms(Patient, Rest).
+
+diagnose(Patient, Diagnosis) :-
+    has_disease(Patient, Diagnosis),
+    write(Patient), write(' may have '), write(Diagnosis), nl,
+    fail.
+diagnose(_, _) :-
+    write('Diagnosis complete.'), nl.
